@@ -1,7 +1,9 @@
 package com.puffin.articles.service;
 
 import com.puffin.articles.domain.Article;
+import com.puffin.articles.domain.Tag;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,4 +13,6 @@ public interface ArticleService {
 	List<Article> getArticles();
 
 	Optional<Article> getOneArticle(String id);
+
+	Tag getArticlesForTag(String tagName, LocalDate yearMonthDay);
 }

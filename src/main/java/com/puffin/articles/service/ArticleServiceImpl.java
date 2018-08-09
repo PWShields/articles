@@ -1,11 +1,13 @@
 package com.puffin.articles.service;
 
 import com.puffin.articles.domain.Article;
+import com.puffin.articles.domain.Tag;
 import com.puffin.articles.repository.ArticleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +35,11 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public Optional<Article> getOneArticle(String id) {
 		return articleRepository.findById(id);
+	}
+
+	@Override
+	public Tag getArticlesForTag(String tagName, LocalDate yearMonthDay) {
+		List<Article> articles = articleRepository.findByTagsAndDate(tagName, yearMonthDay);
+		return null;
 	}
 }

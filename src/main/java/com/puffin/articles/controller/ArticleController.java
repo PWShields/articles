@@ -34,15 +34,12 @@ public class ArticleController {
 	 * @return the articles
 	 */
 	@GetMapping()
-	@ResponseBody
 	public List<Article> getArticles() {
 		return articleService.getArticles();
 	}
 
 
-	@GetMapping()
-	@ResponseBody
-	@RequestMapping("/{id}")
+	@GetMapping("/{id}")
 	public Article getOneArticle(@PathVariable(value = "id") String id) throws ItemNotFoundException {
 		log.info("Request to get article {}", id);
 		Optional<Article> article = articleService.getOneArticle(id);
