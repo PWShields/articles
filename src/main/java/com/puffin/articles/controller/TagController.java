@@ -1,6 +1,7 @@
 package com.puffin.articles.controller;
 
 import com.puffin.articles.domain.Tag;
+import com.puffin.articles.domain.TagResponseWrapper;
 import com.puffin.articles.service.ArticleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class TagController {
 	}
 
 	@GetMapping("/{tagName}/{yearMonthDay}")
-	public Tag getTag(@PathVariable(value = "tagName") String tagName, @PathVariable(value = "yearMonthDay") String yearMonthDay) {
+	public TagResponseWrapper getTag(@PathVariable(value = "tagName") String tagName, @PathVariable(value = "yearMonthDay") String yearMonthDay) {
 		log.info("Request for tags recieved");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 

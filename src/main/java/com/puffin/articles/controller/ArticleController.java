@@ -1,6 +1,7 @@
 package com.puffin.articles.controller;
 
 import com.puffin.articles.domain.Article;
+import com.puffin.articles.domain.ArticleCreateTO;
 import com.puffin.articles.exception.ItemNotFoundException;
 import com.puffin.articles.service.ArticleService;
 import org.slf4j.Logger;
@@ -51,9 +52,9 @@ public class ArticleController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createArticle(@RequestBody Article article) {
+	public void createArticle(@RequestBody ArticleCreateTO articleTO) {
 		log.info("Request to create article received");
-		Article newArticle = articleService.create(article);
+		Article newArticle = articleService.create(articleTO);
 		log.info("Article {} created", newArticle.getId());
 	}
 
