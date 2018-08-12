@@ -33,13 +33,14 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public Optional<Article> getOneArticle(String id) {
+	public Optional<Article> getOneArticle(Long id) {
 		return articleRepository.findById(id);
 	}
 
 	@Override
-	public Tag getArticlesForTag(String tagName, LocalDate yearMonthDay) {
-		List<Article> articles = articleRepository.findByTagsAndDate(tagName, yearMonthDay);
+	public Tag getTagSummary(String tagName, LocalDate articleDate) {
 		return null;
 	}
+
+
 }

@@ -1,15 +1,17 @@
 package com.puffin.articles;
 
 import com.puffin.articles.domain.Article;
+import com.puffin.articles.domain.Tag;
 import com.puffin.articles.repository.ArticleRepository;
+import com.puffin.articles.repository.TagRepository;
+import org.h2.server.web.WebServlet;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class ArticlesApplication {
@@ -19,38 +21,57 @@ public class ArticlesApplication {
 	}
 
 	@Bean
-	CommandLineRunner runner(ArticleRepository articleRepository) {
+	CommandLineRunner runner(ArticleRepository articleRepository, TagRepository tagRepository) {
 		return args -> {
 
-			List<String> tags3 = Arrays.asList("health, fitness, science");
-			List<String> tags2 = Arrays.asList("health, fitness");
-			List<String> tags1 = Arrays.asList("health");
+			articleRepository.deleteAllInBatch();
+			tagRepository.deleteAllInBatch();
 
-			if (articleRepository.findAll().isEmpty()) {
+			Article article1 = new Article()
+					.setTitle("Lets Go Surfing")
+					.setDate(LocalDate.now())
+					.setBody("Great winter surfing this year");
+			Article article2 = new Article()
+					.setTitle("Yoga is cool")
+					.setDate(LocalDate.now())
+					.setBody("Practice is a path");
+			Article article3 = new Article()
+					.setTitle("City to Surf 2018")
+					.setDate(LocalDate.now())
+					.setBody("14 kms in 45 minutes");
 
-				Article article1 = new Article()
-						.setTitle("Lets Go Surfing")
-						.setDate(LocalDate.now())
-						.setBody("Great winter surfing this year")
-						.setTags(tags3);
+			Tag healthTag = new Tag("health");
+			Tag fitnessTag = new Tag("fitness");
+			Tag scienceTag = new Tag("science");
 
-				Article article2 = new Article()
-						.setTitle("Yoga is cool")
-						.setDate(LocalDate.now())
-						.setBody("Practice is a path")
-						.setTags(tags2);
+			tagRepository.save(healthTag);
+			tagRepository.save(fitnessTag);
+			tagRepository.save(scienceTag);
 
-				Article article3 = new Article()
-						.setTitle("City to Surf 2018")
-						.setDate(LocalDate.now())
-						.setBody("14 kms in 45 minutes")
-						.setTags(tags1);
+			article1.getTags().add(healthTag);
+			article1.getTags().add(fitnessTag);
+			article1.getTags().add(scienceTag);
+			articleRepository.save(article1);
+			Tag existingHealthTag = tagRepository.findByName("health");
+			Tag existingFitnessTag = tagRepository.findByName("fitness");
+			Tag existingScienceTag = tagRepository.findByName("science");
+			article2.getTags().add(existingHealthTag);
+			article2.getTags().add(existingFitnessTag);
+			article3.getTags().add(existingScienceTag);
 
-				 articleRepository.save(article1);
-				 articleRepository.save(article2);
-				 articleRepository.save(article3);
-			}
-		};
+			articleRepository.save(article2);
+			articleRepository.save(article3);
+
+		}
+
+				;
+	}
+
+	@Bean
+	ServletRegistrationBean h2servletRegistration() {
+		ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
+		registrationBean.addUrlMappings("/console/*");
+		return registrationBean;
 	}
 
 

@@ -36,7 +36,7 @@ public class TagController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
 		LocalDate articleDate = LocalDate.parse(yearMonthDay, formatter);
-		return articleService.getArticlesForTag(tagName, articleDate);
+		return articleService.getTagSummary(tagName, articleDate);
 
 	}
 }

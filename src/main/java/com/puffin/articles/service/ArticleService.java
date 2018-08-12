@@ -12,7 +12,7 @@ public interface ArticleService {
 
 	List<Article> getArticles();
 
-	Optional<Article> getOneArticle(String id);
+	Optional<Article> getOneArticle(Long id);
 
-	Tag getArticlesForTag(String tagName, LocalDate yearMonthDay);
+	Tag getTagSummary(String tagName, LocalDate articleDate);
 }

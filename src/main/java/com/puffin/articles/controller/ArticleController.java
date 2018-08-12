@@ -40,7 +40,7 @@ public class ArticleController {
 
 
 	@GetMapping("/{id}")
-	public Article getOneArticle(@PathVariable(value = "id") String id) throws ItemNotFoundException {
+	public Article getOneArticle(@PathVariable(value = "id") Long id) throws ItemNotFoundException {
 		log.info("Request to get article {}", id);
 		Optional<Article> article = articleService.getOneArticle(id);
 		if (!article.isPresent()) {
