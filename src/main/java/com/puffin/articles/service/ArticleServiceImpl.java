@@ -1,9 +1,6 @@
 package com.puffin.articles.service;
 
-import com.puffin.articles.domain.Article;
-import com.puffin.articles.domain.ArticleCreateTO;
-import com.puffin.articles.domain.Tag;
-import com.puffin.articles.domain.TagResponseWrapper;
+import com.puffin.articles.domain.*;
 import com.puffin.articles.repository.ArticleRepository;
 import com.puffin.articles.repository.TagRepository;
 import org.slf4j.Logger;
@@ -15,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -25,9 +23,12 @@ public class ArticleServiceImpl implements ArticleService {
 
 	TagRepository tagRepository;
 
-	public ArticleServiceImpl(ArticleRepository articleRepository, TagRepository tagRepository) {
+	TagAssembler tagAssembler;
+
+	public ArticleServiceImpl(ArticleRepository articleRepository, TagRepository tagRepository, TagAssembler tagAssembler) {
 		this.articleRepository = articleRepository;
 		this.tagRepository = tagRepository;
+		this.tagAssembler = tagAssembler;
 	}
 
 	@Override
@@ -48,13 +49,15 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public TagResponseWrapper getTagSummary(String tagName, LocalDate articleDate) {
-		List<Article> articles = articleRepository.findByTagsAndDate(tagName, articleDate);
-		return null;
+		Tag tag = convertTagNameToTag(tagName);
+		List<Article> articles = articleRepository.findByTagsAndDate(tag, articleDate);
+		Set<String> relatedTagNames = buildRelatedTagNames(articles, tagName);
+		TagResponseWrapper response = tagAssembler.assemble(articles, tagName, relatedTagNames);
+		return response;
 	}
 
 
 	private Article assembleArticleFromTransferObject(ArticleCreateTO articleCreateTO) {
-
 		Set<Tag> tags = convertTagNamesToTags(articleCreateTO.getTags());
 
 		return new Article()
@@ -67,15 +70,39 @@ public class ArticleServiceImpl implements ArticleService {
 	private Set<Tag> convertTagNamesToTags(Set<String> tagNames) {
 		Set<Tag> tags = new HashSet<>();
 		for (String name : tagNames) {
-			Tag tag = tagRepository.findByName(name);
-			if (tag == null) {
-				tag = new Tag(name);
-				tagRepository.save(tag);
-			}
-			tags.add(tag);
+			tags.add(convertTagNameToTag(name));
 		}
 		return tags;
 	}
 
+	private Tag convertTagNameToTag(String tagName) {
+		Tag tag = tagRepository.findByName(tagName);
+		if (tag == null) {
+			tag = new Tag(tagName);
+			tagRepository.save(tag);
+		}
+		return tag;
+	}
+
+	private Set<String> buildRelatedTagNames(List<Article> articles, String queryTag) {
+		Set<Tag> tags = buildTags(articles);
+		Set<String> tagNames = tags.stream().map(
+				tag -> tag.getName()
+		).collect(Collectors.toSet());
+		return removeQueryTag(tagNames, queryTag);
+	}
+
+	private Set<Tag> buildTags(List<Article> articles) {
+		Set<Tag> allTags = new HashSet<>();
+		for (Article article : articles) {
+			allTags.addAll(article.getTags());
+		}
+		return allTags;
+	}
+
+	private Set<String> removeQueryTag(Set<String> tagNames, String queryTag) {
+		tagNames.remove(queryTag);
+		return tagNames;
+	}
 
 }
