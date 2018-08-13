@@ -42,7 +42,7 @@ From an IDE run the ArticlesApplication class.
 
 ### Run from command line
 
-java -jar purchaseorderapi.jar
+java -jar articles.jar from project root
 
 
 ## Testing
