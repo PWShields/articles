@@ -21,9 +21,6 @@ POST
 
 http://localhost:8080/articles
 
-## Design Notes
-
-The development lifecycle is an agile one. I have tried not to over engineer the first draft solution with the view that details can be improved following stakeholder feedback.
 
 ## Technologies
 
@@ -44,6 +41,10 @@ From an IDE run the ArticlesApplication class.
 
 java -jar articles.jar from project root
 
+or run the code directly using mvn springboot:run from project root
+
+If you have docker installed please see below about running as a docker image.
+
 
 ## Testing
 
@@ -53,5 +54,31 @@ Unit tests can be run using:
 
 mvn test
 
-## Docker
+## Docker Image
+
+There is a Docker file in src/main/docker that can be used to build a Docker image of the application.
+
+### To Build The Docker Image
+
+Command line  - "mvn package docker:build"
+IDE - make a maven config that runs "package docker:build"
+
+### To Run The Docker Image
+
+Command line -  "docker run -p 8080:8080 article/articles", then go to your browser and go to http://localhost:8080/swagger-ui.html.
+
+### Stop Docker Image
+
+"docker ps" will give you the number of the Docker container.
+
+"docker stop 'container number'" will stop the application.
+
+### Sharing A Built Docker Image Manually
+
+Docker supports exporting and saving.
+
+To export a copy of the current instance use
+'docker export' to save and 'docker import' to load.
+
+To save a copy of the docker image use 'docker save' to save and 'docker load' to load.
 
