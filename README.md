@@ -21,6 +21,10 @@ POST
 
 http://localhost:8080/articles
 
+## Design Notes
+
+The development lifecycle is an agile one. I have tried not to over engineer the first draft solution with the view that details can be improved following stakeholder feedback.
+
 ## Technologies
 
 - Java 8
@@ -31,11 +35,23 @@ http://localhost:8080/articles
 - Lombok
 - Swagger
 
-## Run
+## Running Locally
+
+From an IDE run the ArticlesApplication class. 
 
 
-## Tests
+### Run from command line
 
+java -jar purchaseorderapi.jar
+
+
+## Testing
+
+I have used the FireFox plugin RESTer extensively during development to help ensure the request and response bodies meet the specification.
+
+Unit tests can be run using:
+
+mvn test
 
 ## Docker
 
