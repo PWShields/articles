@@ -12,15 +12,97 @@ GET
 
 http://localhost:8080/articles
 
+ResponseBody:
+```
+[
+    {
+        "id": 1,
+        "title": "Lets Go Surfing",
+        "date": "2018-08-13",
+        "body": "Great winter surfing this year",
+        "tags": [
+            "science",
+            "health",
+            "fitness"
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Yoga is cool",
+        "date": "2018-08-13",
+        "body": "Practice is a path",
+        "tags": [
+            "health",
+            "fitness"
+        ]
+    },
+    {
+        "id": 3,
+        "title": "City to Surf 2018",
+        "date": "2018-08-13",
+        "body": "14 kms in 45 minutes",
+        "tags": [
+            "science"
+        ]
+    }
+]
+
+```
+Status: 200
+
 http://localhost:8080/articles/1
+
+ResponseBody:
+```$xslt
+{
+    "id": 1,
+    "title": "Lets Go Surfing",
+    "date": "2018-08-13",
+    "body": "Great winter surfing this year",
+    "tags": [
+        "science",
+        "fitness",
+        "health"
+    ]
+}
+
+```
+Status: 200
 
 http://localhost:8080/tags/health/20180813
 
+ResponseBody:
+```$xslt
+{
+    "tag": "health",
+    "count": 2,
+    "articles": [
+        1,
+        2
+    ],
+    "related_tags": [
+        "fitness",
+        "science"
+    ]
+
+```
+Status: 200
 
 POST
 
 http://localhost:8080/articles
 
+RequestBody:
+
+```
+{
+  "title": "latest science shows that potato chips are better for you than sugar",
+  "date" : "2016-09-22",
+  "body" : "some text, potentially containing simple markup about how potato chips are great",
+  "tags" : ["health", "fitness", "science", "chips"]
+}
+```
+Status: 201
 
 ## Technologies
 
