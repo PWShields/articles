@@ -27,10 +27,6 @@ public class Article {
 
 	@JsonSerialize(using = CustomSetSerializer.class)
 	@ManyToMany(fetch = FetchType.LAZY)
-//			cascade = {
-//					CascadeType.PERSIST,
-//					CascadeType.MERGE
-//			})
 	@JoinTable(name = "article_tag",
 			joinColumns = {@JoinColumn(name = "ARTICLE_ID")},
 			inverseJoinColumns = {@JoinColumn(name = "TAG_ID")})
@@ -45,9 +41,6 @@ public class Article {
 
 	public Article() {
 	}
-
-	//These support the builder pattern  as opposed to @Data which
-	//would generate "normal" setters.
 
 	public Long getId() {
 		return id;
